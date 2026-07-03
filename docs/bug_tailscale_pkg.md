@@ -11,7 +11,7 @@ El binario oficial de Tailscale para Linux `arm64` crashea en Android (aunque es
 | SO | Android (rooteado) |
 | Ejecución | Termux |
 | Arquitectura | `arm64-v8a` (aarch64) |
-| Kernel | `4.14.186-perf-00289-g570b5047116b` |
+| Kernel | `4.14.x-generic` |
 | Bins probados | `tailscaled` 1.98.8 y 1.94.1 (oficial arm64 tarball) |
 | Síntoma | Crash justo después del login exitoso, al recibir netmap del control plane |
 | Error fatal | `SIGSYS: bad system call` en `syscall.faccessat2` (syscall 0x1b7 = 439) |
@@ -48,8 +48,8 @@ También se probó `userspace-networking` (modo sin root/TUN) y el crash ocurre 
 De la versión 1.98.8:
 
 ```
-2026/07/03 16:34:13 control: RegisterReq: got response; machineAuthorized=true; authURL=false
-2026/07/03 16:34:14 control: netmap: got new dial plan from control
+YYYY/MM/DD HH:MM:SS control: RegisterReq: got response; machineAuthorized=true; authURL=false
+YYYY/MM/DD HH:MM:SS control: netmap: got new dial plan from control
 SIGSYS: bad system call
 PC=0x19500 m=13 sigcode=1
 

@@ -33,7 +33,7 @@ Cuando Tailscale está instalado desde la Play Store en Android, la app usa el f
 
 - **No existe** el comando `tailscale` accesible desde Termux/CLI.
 - **No existe** la interfaz `tailscale0`.
-- **Sí existe** la interfaz `tun0` con la IP de Tailscale del nodo (por ejemplo, `100.115.32.125`).
+- **Sí existe** la interfaz `tun0` con la IP de Tailscale del nodo (por ejemplo, `100.x.x.x`).
 - Las rutas a nodos de la red (`100.x.x.x`) se dirigen por `tun0` (en routing table `1036`).
 - Las rutas IPv6 de Tailscale (`fd7a:115c:a1e0::/48`) también están presentes en `tun0`.
 - **`tailscale status` no funciona** desde Termux porque el binario CLI no está en el `$PATH` del sistema.
