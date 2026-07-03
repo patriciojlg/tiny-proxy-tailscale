@@ -15,7 +15,7 @@ Este proyecto aborda la **configuración y prestación de un servicio de proxy a
 | Componente | Estado |
 |---|---|
 | Instalar `tinyproxy` | ✅ Hecho (v1.11.3) |
-| Instalar `tailscale` | 🔄 Pendiente (no está en repos de Termux; requiere binario manual) |
+| Instalar `tailscale` | ✅ Hecho (v1.98.8 — binario oficial arm64) |
 | Configurar `tinyproxy` | 🔄 Pendiente |
 | Exponer proxy por Tailscale | 🔄 Pendiente |
 | Scripts de arranque/parada | 🔄 Pendiente |
@@ -36,35 +36,26 @@ pkg update
 pkg install tinyproxy   # ya instalado: v1.11.3
 ```
 
-### Fase 2 – Instalar Tailscale (binario manual)
+### Fase 2 – Instalar Tailscale (hecho)
 
-Tailscale no está disponible en los repos de Termux ni en TUR. Debes instalar el binario oficial `arm64`:
+Tailscale no está en los repos de Termux. Se descargó e instaló el binario oficial `arm64`:
 
 ```bash
-# Ir a $PREFIX/usr/bin o crear un directorio en $PATH
-INSTALL_DIR="$PREFIX/bin"
-mkdir -p "$INSTALL_DIR"
+# Descargar la última versión estable
+VERSION=$(curl -s https://api.github.com/repos/tailscale/tailscale/releases/latest \
+    | grep -oE '"tag_name": "v[^"]+"' | head -1 | sed 's/"tag_name": "v//;s/"//')
+curl -fSL "https://pkgs.tailscale.com/stable/tailscale_${VERSION}_arm64.tgz" \
+    -o "$HOME/tailscale_arm64.tgz"
 
-# Descargar el binario oficial para arm64
-# Visita https://pkgs.tailscale.com/stable/#static para obtener la última URL
-curl -fsSL https://pkgs.tailscale.com/stable/tailscale_1.82.0_arm64.tgz -o /tmp/tailscale_arm64.tgz
-
-# Extraer
-tar xzf /tmp/tailscale_arm64.tgz -C /tmp/
-
-# Copiar binarios
-cp /tmp/tailscale_*/tailscale "$INSTALL_DIR/"
-cp /tmp/tailscale_*/tailscaled "$INSTALL_DIR/"
-chmod +x "$INSTALL_DIR/tailscale" "$INSTALL_DIR/tailscaled"
-
-# Limpiar
-rm -rf /tmp/tailscale_*
+# Extraer e instalar
+tar xzf "$HOME/tailscale_arm64.tgz" -C "$HOME"
+cp "$HOME"/tailscale_*/tailscale "$HOME"/tailscale_*/tailscaled "$PREFIX/bin/"
+chmod +x "$PREFIX/bin/tailscale" "$PREFIX/bin/tailscaled"
+rm -rf "$HOME"/tailscale_*
 
 # Verificar
-tailscale version
+tailscale version   # 1.98.8 ✅
 ```
-
-> **Nota:** Si la URL de arriba falla, visita https://pkgs.tailscale.com/stable/#static y copia la URL del tarball `arm64` más reciente.
 
 ### Fase 3 – Configurar Tailscale
 
@@ -134,7 +125,7 @@ curl -x http://<tailscale-ip-del-telefono>:8888 -I https://www.google.com
 ## TODO
 
 - [x] Instalar `tinyproxy` en Termux
-- [ ] Instalar `tailscale` (binario oficial arm64)
+- [x] Instalar `tailscale` (binario oficial arm64)
 - [ ] Crear `config/tinyproxy.conf` funcional
 - [ ] Crear scripts `scripts/start.sh`, `scripts/stop.sh`, `scripts/status.sh`
 - [ ] Autenticar y levantar Tailscale (`tailscale up`)
